@@ -1,10 +1,14 @@
 package mrj.example.testapp.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mrj.example.testapp.adapters.WordAdapter
@@ -12,6 +16,7 @@ import mrj.example.testapp.objects.Word
 import mrj.example.testapp.R
 import mrj.example.testapp.asyncreads.ReadWord
 import mrj.example.testapp.database.WordDatabase
+import mrj.example.testapp.utils.Constants
 import mrj.example.testapp.utils.WordTable
 
 @Suppress("DEPRECATION")
@@ -46,7 +51,10 @@ class MainActivity : AppCompatActivity() {
 
         fillList(cursor)
 
-        rv_main.adapter = WordAdapter(list_word)
+        val dividerItemDecoration = DividerItemDecoration(this,DividerItemDecoration.HORIZONTAL)
+        rv_main.addItemDecoration(dividerItemDecoration)
+
+        rv_main.adapter = WordAdapter(this,list_word)
         readable_db.endTransaction()
 
     }
@@ -80,8 +88,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun read_from_url(){
+
         val url = "https://mrjavohirtest.pythonanywhere.com"
         ReadWord(this).execute(url)
+
+    }
+
+    fun open_word(word:Word){
+        val intent = Intent(this,WordActivty::class.java)
+        intent.putExtra(Constants.KEY_EXTRA_WORD,word.name)
+        intent.putExtra(Constants.KEY_EXTRA_WORDTYPE,word.wordtype)
+        intent.putExtra(Constants.KEY_EXTRA_DESCRIPTION,word.description)
+        startActivity(intent)
     }
 
 }
