@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#8A0303</color>
+    <color name="teal_200">#04A0DD</color>
+    <color name="teal_120">#3F51B5</color>
+    <color name="teal_210">#FF9800</color>
+    <color name="teal_130">#2196F3</color>
 </resources>

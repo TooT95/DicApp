@@ -6,11 +6,13 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:layout_marginStart="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="2">
 
         <TextView
+            android:background="@drawable/rounded_button_word"
             android:id="@+id/txt_word"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -20,23 +22,18 @@
 
         <TextView
             android:id="@+id/txt_wordtype"
+            android:background="@drawable/rounded_button_wordtype"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
+            android:shadowColor="#FFFFFF"
             android:text="@string/text_wordtype"
             android:textSize="14sp"
             android:textStyle="bold" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/txt_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="@string/text_description"
-        android:textSize="14sp" />
 
     <TextView
         android:background="@color/black"

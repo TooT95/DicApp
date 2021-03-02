@@ -14,11 +14,9 @@ class WordHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     var txt_word: TextView
     var txt_wordtype: TextView
-    var txt_description: TextView
 
     init {
         txt_word = itemView.findViewById(R.id.txt_word)
         txt_wordtype = itemView.findViewById(R.id.txt_wordtype)
-        txt_description = itemView.findViewById(R.id.txt_description)
     }
 }

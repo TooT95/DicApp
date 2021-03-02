@@ -46,8 +46,6 @@ class WordAdapter : RecyclerView.Adapter<WordHolder>, View.OnClickListener {
         holder.itemView.tag = position
         holder.txt_word.text = resources.getString(R.string.text_word, word.name)
         holder.txt_wordtype.text = resources.getString(R.string.text_wordtype, word.wordtype)
-        holder.txt_description.text =
-            resources.getString(R.string.text_description, word.description)
 
     }
 

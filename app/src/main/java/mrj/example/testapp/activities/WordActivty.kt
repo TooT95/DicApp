@@ -28,9 +28,9 @@ class WordActivty : AppCompatActivity() {
             var wordtype = intent.extras?.getString(Constants.KEY_EXTRA_WORDTYPE)
             var description = intent.extras?.getString(Constants.KEY_EXTRA_DESCRIPTION)
 
-            txt_word.text = word
-            txt_wordtype.text = wordtype
-            txt_description.text = description
+            txt_word.text = resources.getString(R.string.text_word,word)
+            txt_wordtype.text = resources.getString(R.string.text_wordtype,wordtype)
+            txt_description.text = resources.getString(R.string.text_description,description)
         }
 
     }
