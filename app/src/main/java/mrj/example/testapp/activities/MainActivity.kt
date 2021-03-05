@@ -1,14 +1,20 @@
 package mrj.example.testapp.activities
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,7 +36,12 @@ class MainActivity : AppCompatActivity() {
     lateinit var word_db: WordDatabase
     lateinit var readable_db: SQLiteDatabase
     lateinit var fab: FloatingActionButton
-    lateinit var mMenu:Menu
+    lateinit var mMenu: Menu
+    lateinit var searchEditText: EditText
+    lateinit var txt_appname: TextView
+    lateinit var menuItemsearch: MenuItem
+    lateinit var menu_redownload: MenuItem
+
     val DIALOG_ID_REDOWNLOAD = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,27 +75,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("NewApi", "ObsoleteSdkInt")
+    @SuppressLint("NewApi")
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
-
+        menuItemsearch = menu!!.findItem(R.id.menu_search)
+        menu_redownload = menu!!.findItem(R.id.menu_redownload)
+        showHideHeaders(false)
         mMenu = menu!!
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-//            //remove old
-//            menu!!.removeItem(R.id.menu_search)
-//            val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-//            val searchView: SearchView = menu!!.findItem(R.id.menu_search).actionView as SearchView
-//            searchView.setSearchableInfo(
-//                searchManager.getSearchableInfo(componentName)
-//            )
-//            searchView.setIconifiedByDefault(false)
-//        } else {
-//            //remove new
-//            menu!!.removeItem(R.id.menu_search)
-//        }
-
-
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -96,7 +93,9 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.menu_search -> {
-                onSearchRequested()
+                searchWord()
+//                val intent = Intent(this,SearchableActivity::class.java)
+//                startActivity(intent)
                 return true
             }
         }
@@ -104,20 +103,30 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    @SuppressLint("NewApi", "ObsoleteSdkInt")
-    override fun onSearchRequested(): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            val mi: MenuItem = mMenu.findItem(R.id.menu_search)
-            if (mi.isActionViewExpanded) {
-                mi.collapseActionView()
-            } else {
-                mi.expandActionView()
-            }
-        } else {
-            //onOptionsItemSelected(mMenu.findItem(R.id.search));
-        }
-        return super.onSearchRequested()
+    private fun searchWord() {
+        showHideHeaders(true)
+
     }
+
+    private fun showHideHeaders(searching: Boolean) {
+
+        if (searching) {
+            searchEditText.visibility = View.VISIBLE
+            txt_appname.visibility = View.GONE
+            fab.visibility = View.GONE
+            menuItemsearch.setVisible(false)
+            menu_redownload.setVisible(false)
+            searchEditText.requestFocus();
+        } else {
+            searchEditText.visibility = View.GONE
+            txt_appname.visibility = View.VISIBLE
+            fab.visibility = View.VISIBLE
+            menuItemsearch.setVisible(true)
+            menu_redownload.setVisible(true)
+        }
+
+    }
+
 
     private fun fillList(cursor: Cursor) {
 
@@ -140,7 +149,23 @@ class MainActivity : AppCompatActivity() {
     private fun initialization() {
 
         fab = findViewById(R.id.fab_search)
+        fab.setOnClickListener(View.OnClickListener {
+            searchWord()
+        })
 
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        searchEditText = findViewById(R.id.searchEditText)
+        searchEditText.setOnFocusChangeListener { view, b ->
+            if (b.equals(false)) {
+                (view as EditText).text.clear()
+                showHideHeaders(false)
+            }
+        }
+        txt_appname = findViewById(R.id.txt_app_name)
+
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         rv_main = findViewById(R.id.rv_main)
         rv_main.setHasFixedSize(true)
