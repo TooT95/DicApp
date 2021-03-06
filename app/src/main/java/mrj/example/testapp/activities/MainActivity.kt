@@ -1,7 +1,8 @@
 package mrj.example.testapp.activities
 
 import android.annotation.SuppressLint
-import android.content.Context
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -12,7 +13,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import mrj.example.testapp.R
 import mrj.example.testapp.adapters.WordAdapter
-import mrj.example.testapp.asyncreads.ReadWord
+import mrj.example.testapp.database.DBHelper
 import mrj.example.testapp.database.WordDatabase
 import mrj.example.testapp.objects.Word
 import mrj.example.testapp.utils.Constants
@@ -33,16 +33,18 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var list_word: MutableList<Word>
     lateinit var rv_main: RecyclerView
-    lateinit var word_db: WordDatabase
+    lateinit var word_db: DBHelper
     lateinit var readable_db: SQLiteDatabase
     lateinit var fab: FloatingActionButton
     lateinit var mMenu: Menu
     lateinit var searchEditText: EditText
     lateinit var txt_appname: TextView
     lateinit var menuItemsearch: MenuItem
-    lateinit var menu_redownload: MenuItem
+    lateinit var txt_download_progress: TextView
+    lateinit var dialog_download: Dialog
 
     val DIALOG_ID_REDOWNLOAD = 1
+    val DIALOG_ID_DOWNLOAD = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +59,19 @@ class MainActivity : AppCompatActivity() {
     fun fillAdapter() {
 
         readable_db.beginTransaction()
-        val cursor = readable_db.query(WordTable.TABLE_NAME, null, null, null, null, null, null)
+        val cursor = readable_db.query(
+            WordTable.TABLE_NAME,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "100"
+        )
 
         if (cursor.count == 0) {
             readable_db.endTransaction()
-            read_from_url()
             return
         }
 
@@ -79,7 +89,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         menuItemsearch = menu!!.findItem(R.id.menu_search)
-        menu_redownload = menu!!.findItem(R.id.menu_redownload)
         showHideHeaders(false)
         mMenu = menu!!
         return super.onCreateOptionsMenu(menu)
@@ -88,14 +97,8 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
-            R.id.menu_redownload -> {
-                showDialog(DIALOG_ID_REDOWNLOAD)
-                return true
-            }
             R.id.menu_search -> {
                 searchWord()
-//                val intent = Intent(this,SearchableActivity::class.java)
-//                startActivity(intent)
                 return true
             }
         }
@@ -105,7 +108,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun searchWord() {
         showHideHeaders(true)
-
     }
 
     private fun showHideHeaders(searching: Boolean) {
@@ -115,20 +117,31 @@ class MainActivity : AppCompatActivity() {
             txt_appname.visibility = View.GONE
             fab.visibility = View.GONE
             menuItemsearch.setVisible(false)
-            menu_redownload.setVisible(false)
-            searchEditText.requestFocus();
+            searchEditText.requestFocus()
+
+            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
+                InputMethodManager.SHOW_IMPLICIT,
+                0
+            )
+
         } else {
             searchEditText.visibility = View.GONE
             txt_appname.visibility = View.VISIBLE
             fab.visibility = View.VISIBLE
             menuItemsearch.setVisible(true)
-            menu_redownload.setVisible(true)
+
+            (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
+                InputMethodManager.HIDE_IMPLICIT_ONLY,
+                0
+            )
+
         }
 
     }
 
-
     private fun fillList(cursor: Cursor) {
+
+        list_word.clear()
 
         while (cursor.moveToNext()) {
 
@@ -157,11 +170,16 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         searchEditText = findViewById(R.id.searchEditText)
-        searchEditText.setOnFocusChangeListener { view, b ->
-            if (b.equals(false)) {
-                (view as EditText).text.clear()
+        searchEditText.visibility = View.GONE
+        searchEditText.setOnClickListener {
+            val etxt = (it as EditText)
+
+            if (!(it as EditText).isPressed) {
+                fillAdapterSearch()
+                etxt.text.clear()
                 showHideHeaders(false)
             }
+
         }
         txt_appname = findViewById(R.id.txt_app_name)
 
@@ -173,7 +191,7 @@ class MainActivity : AppCompatActivity() {
         rv_main.layoutManager = LinearLayoutManager(this)
 
         list_word = ArrayList()
-        word_db = WordDatabase(this)
+        word_db = DBHelper(this)
         readable_db = word_db.readableDatabase
 
         rv_main.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -189,11 +207,21 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun read_from_url() {
-
-        val url = "https://mrjavohirtest.pythonanywhere.com"
-        ReadWord(this).execute(url)
-
+    @SuppressLint("Recycle")
+    private fun fillAdapterSearch() {
+        readable_db.beginTransaction()
+        val cursor = readable_db.query(
+            WordTable.TABLE_NAME,
+            null,
+            "${WordTable.word_col} LIKE ?",
+            arrayOf("%${searchEditText.text.toString()}%"),
+            null,
+            null,
+            null
+        )
+        fillList(cursor)
+        rv_main.adapter!!.notifyDataSetChanged()
+        readable_db.endTransaction()
     }
 
     fun open_word(word: Word) {

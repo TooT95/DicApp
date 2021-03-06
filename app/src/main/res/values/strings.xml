@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TestApp</string>
+    <string name="app_name">Offline dictionary</string>
     <string name="text_word">word: %s</string>
     <string name="text_wordtype">type: %s</string>
     <string name="text_description">Description: %s</string>
@@ -8,5 +8,9 @@
     <string name="fab_search">Search</string>
     <string name="app_label">Search</string>
     <string name="search_hint">Search</string>
+    <string name="cancel_btn">X</string>
+    <string name="hint_search">search</string>
+    <string name="btn_ok">OK</string>
+    <string name="txt_downloading_word">Downloading word %s</string>
 
 </resources>
