@@ -16,16 +16,4 @@
         android:layout_height="wrap_content"
         android:text="@string/app_name" />
 
-
-    <EditText
-        android:id="@+id/searchEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:autofillHints=""
-        android:hint="@string/hint_search"
-        android:inputType="textPersonName"
-        tools:ignore="LabelFor" />
-
-
 </androidx.appcompat.widget.Toolbar>

@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -38,13 +39,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var fab: FloatingActionButton
     lateinit var mMenu: Menu
     lateinit var searchEditText: EditText
-    lateinit var txt_appname: TextView
     lateinit var menuItemsearch: MenuItem
     lateinit var txt_download_progress: TextView
     lateinit var dialog_download: Dialog
+    lateinit var btn_search: Button
 
-    val DIALOG_ID_REDOWNLOAD = 1
-    val DIALOG_ID_DOWNLOAD = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,8 +112,8 @@ class MainActivity : AppCompatActivity() {
     private fun showHideHeaders(searching: Boolean) {
 
         if (searching) {
-            searchEditText.visibility = View.VISIBLE
-            txt_appname.visibility = View.GONE
+//            searchEditText.visibility = View.VISIBLE
+//            txt_appname.visibility = View.GONE
             fab.visibility = View.GONE
             menuItemsearch.setVisible(false)
             searchEditText.requestFocus()
@@ -125,8 +124,8 @@ class MainActivity : AppCompatActivity() {
             )
 
         } else {
-            searchEditText.visibility = View.GONE
-            txt_appname.visibility = View.VISIBLE
+//            searchEditText.visibility = View.GONE
+//            txt_appname.visibility = View.VISIBLE
             fab.visibility = View.VISIBLE
             menuItemsearch.setVisible(true)
 
@@ -167,21 +166,19 @@ class MainActivity : AppCompatActivity() {
         })
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
+//        val toolbar = (layoutInflater.inflate(R.layout.toolbar, null, false) as Toolbar)
         setSupportActionBar(toolbar)
 
         searchEditText = findViewById(R.id.searchEditText)
-        searchEditText.visibility = View.GONE
         searchEditText.setOnClickListener {
-            val etxt = (it as EditText)
-
-            if (!(it as EditText).isPressed) {
-                fillAdapterSearch()
-                etxt.text.clear()
-                showHideHeaders(false)
-            }
-
+            searchwithparams(it)
         }
-        txt_appname = findViewById(R.id.txt_app_name)
+        btn_search = findViewById(R.id.btn_search)
+        btn_search.setOnClickListener({ it ->
+            searchwithparams(it)
+        })
+
+
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
@@ -205,6 +202,19 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun searchwithparams(it: View?) {
+        val etxt = searchEditText
+
+        if (!etxt.isPressed) {
+            showHideHeaders(false)
+            if (etxt.text.isEmpty()) {
+                fillAdapter()
+                return
+            }
+            fillAdapterSearch()
+        }
     }
 
     @SuppressLint("Recycle")
