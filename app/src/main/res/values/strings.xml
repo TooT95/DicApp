@@ -14,5 +14,6 @@
     <string name="txt_downloading_word">Downloading word %s</string>
     <string name="txt_list_empty">List empty. Tap to search...</string>
     <string name="menu_clear_history">Clear history</string>
+    <string name="menu_settings">Settings</string>
 
 </resources>

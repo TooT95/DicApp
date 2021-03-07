@@ -303,8 +303,13 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_clear_history -> clearHistory()
+            R.id.menu_settings -> open_settings()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun open_settings() {
+
     }
 
     private fun clearHistory() {
