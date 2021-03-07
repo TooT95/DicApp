@@ -9,7 +9,7 @@ class WordTable {
 
     companion object {
         var TABLE_NAME = "entries"
-//        var TABLE_NAME = "table_word"
+        var TABLE_HISTORY = "history"
         var id_col = "id"
         var word_col = "word"
         var wordtype_col = "wordtype"

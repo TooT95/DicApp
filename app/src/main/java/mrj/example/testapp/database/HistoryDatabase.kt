@@ -11,12 +11,12 @@ import mrj.example.testapp.utils.WordTable
  * Created by JavohirAI
  */
 
-class WordDatabase(context: Context?) :
+class HistoryDatabase(context: Context?) :
     SQLiteOpenHelper(context, Constants.DB_NAME, null, Constants.DB_VERSION) {
 
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val CREATE_WORDS_TABLE = ("CREATE TABLE " + WordTable.TABLE_NAME + "("
+        val CREATE_WORDS_TABLE = ("CREATE TABLE " + WordTable.TABLE_HISTORY + "("
                 + WordTable.id_col + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + WordTable.word_col + " TEXT,"
                 + WordTable.wordtype_col + " TEXT,"

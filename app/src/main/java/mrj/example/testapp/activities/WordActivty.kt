@@ -1,6 +1,7 @@
 package mrj.example.testapp.activities
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,8 @@ class WordActivty : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.item_word)
 
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         fillActivity()
 
         initDetails()
@@ -42,11 +45,20 @@ class WordActivty : AppCompatActivity() {
 
     private fun fillActivity() {
 
-        val toolbar = (layoutInflater.inflate(R.layout.toolbar, null, false) as Toolbar)
-        setSupportActionBar(toolbar)
+//        val toolbar = (layoutInflater.inflate(R.layout.toolbar, null, false) as Toolbar)
+//        setSupportActionBar(toolbar)
 
         txt_word = findViewById(R.id.txt_word)
         txt_wordtype = findViewById(R.id.txt_wordtype)
         txt_description = findViewById(R.id.txt_description)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when(item.itemId){
+            android.R.id.home -> finish()
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }

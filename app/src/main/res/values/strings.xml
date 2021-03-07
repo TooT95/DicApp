@@ -12,5 +12,7 @@
     <string name="hint_search">search</string>
     <string name="btn_ok">OK</string>
     <string name="txt_downloading_word">Downloading word %s</string>
+    <string name="txt_list_empty">List empty. Tap to search...</string>
+    <string name="menu_clear_history">Clear history</string>
 
 </resources>

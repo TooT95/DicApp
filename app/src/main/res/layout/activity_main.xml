@@ -12,31 +12,40 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="20">
 
+            <ImageView
+                android:id="@+id/iv_search_off"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:contentDescription="@string/cancel_btn"
+                android:src="@drawable/ic_search_off" />
+
             <EditText
                 android:id="@+id/searchEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_weight="18"
                 android:autofillHints=""
-                android:layout_weight="19"
                 android:hint="@string/hint_search"
                 android:inputType="textPersonName"
                 tools:ignore="LabelFor" />
 
-            <Button
-                android:layout_weight="1"
-                android:id="@+id/btn_search"
+            <ImageView
+                android:id="@+id/iv_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_ok" />
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:contentDescription="@string/btn_ok"
+                android:src="@drawable/ic_search" />
 
         </LinearLayout>
 
@@ -44,6 +53,15 @@
             android:id="@+id/rv_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/txt_list_empty"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="@string/txt_list_empty"
+            android:textAlignment="center" />
+
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
