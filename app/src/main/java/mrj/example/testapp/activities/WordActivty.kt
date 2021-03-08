@@ -51,6 +51,26 @@ class WordActivty : AppCompatActivity() {
         txt_word = findViewById(R.id.txt_word)
         txt_wordtype = findViewById(R.id.txt_wordtype)
         txt_description = findViewById(R.id.txt_description)
+
+        val sharedPref =
+            getSharedPreferences(resources.getString(R.string.name_shared_preferences), 0)
+        var defaultValue = resources.getInteger(R.integer.text_word_size)
+        var textsize = sharedPref.getInt(resources.getString(R.string.key_word_size), defaultValue)
+
+        if (textsize.equals(defaultValue)) {
+            setSizeTextView(txt_word, defaultValue)
+        } else {
+            setSizeTextView(txt_word, textsize)
+        }
+
+        defaultValue = resources.getInteger(R.integer.text_wordtype_size)
+        textsize = sharedPref.getInt(resources.getString(R.string.key_wordtype_size), defaultValue)
+
+        if (textsize.equals(defaultValue)) {
+            setSizeTextView(txt_wordtype, defaultValue)
+        } else {
+            setSizeTextView(txt_wordtype, textsize)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -61,4 +81,10 @@ class WordActivty : AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
+
+    private fun setSizeTextView(txt: TextView, defaultValue: Int) {
+        txt.textSize = defaultValue.toFloat()
+        txt.text = defaultValue.toString()
+    }
+
 }

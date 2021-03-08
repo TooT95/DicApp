@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <integer name="text_word_size">18</integer>
+    <integer name="text_wordtype_size">14</integer>
+
+</resources>

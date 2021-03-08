@@ -2,7 +2,9 @@ package mrj.example.testapp.activities
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
@@ -55,6 +57,11 @@ class MainActivity : AppCompatActivity() {
         fillAdapter()
 
         showHideHeaders(false)
+    }
+
+    override fun onResume() {
+        fillAdapter()
+        super.onResume()
     }
 
     @SuppressLint("Recycle")
@@ -170,9 +177,9 @@ class MainActivity : AppCompatActivity() {
 
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                if(s.isEmpty()){
+                if (s.isEmpty()) {
                     fillAdapter()
-                }else{
+                } else {
                     fillAdapterSearch()
                 }
             }
@@ -180,6 +187,7 @@ class MainActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
             }
+
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 
             }
@@ -309,7 +317,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun open_settings() {
-
+        val intent = Intent(this,SettingsActivity::class.java)
+        startActivity(intent)
     }
 
     private fun clearHistory() {
